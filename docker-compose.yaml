@@ -29,13 +29,22 @@ services:
     restart: always
     working_dir: '/app'
     volumes:
-      - './symfony:/app'
+      - '.:/app'
     ports:
       - '${SYM_PORT}:8000'
     command: ['php', '-S', '0.0.0.0:8000', '-t', 'public/']
     depends_on:
       - 'postgres'
       - 'redis'
+
+  rr:
+    build:
+      dockerfile: .build/rr/Dockerfile
+    ports:
+      - '9001:9001'
+    user: '1000:1000'
+    volumes:
+      - ./symfony:/app
 
   graphql:
     image: 'hasura/graphql-engine:latest'
